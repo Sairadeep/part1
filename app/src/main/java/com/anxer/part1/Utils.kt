@@ -1,5 +1,8 @@
 package com.anxer.part1
 
+import android.app.ActivityManager
+import android.content.Context
+
 object Utils {
 
     private var nameToCheck : String= "Default"
@@ -43,4 +46,20 @@ object EvenOddResponse {
     }
 
     fun getResponseValueEO() = eoresponseBack
+}
+
+
+object IsServiceOn {
+    @Suppress("Deprecation")
+    fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+        val manager: ActivityManager =
+            context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val services = manager.getRunningServices(Int.MAX_VALUE)
+        for (service in services) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
 }

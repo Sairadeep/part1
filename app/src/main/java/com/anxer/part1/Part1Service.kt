@@ -6,12 +6,14 @@ import android.os.IBinder
 import android.util.Log
 
 class Part1Service : Service() {
+    private var isServiceRunning = false
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("part1Service", "Part1Service started, starting part2 service now")
         val part2ServiceStart = Intent("MyPart2Service")
         part2ServiceStart.setPackage("com.anxer.part2")
-        startService(part2ServiceStart)
+        isServiceRunning = IsServiceOn.isServiceRunning(this,part2ServiceStart::class.java)
+        if(!isServiceRunning) startService(part2ServiceStart) else Log.d("part1Service","part2 Service is already running.")
         return super.onStartCommand(intent, flags, startId)
     }
 
