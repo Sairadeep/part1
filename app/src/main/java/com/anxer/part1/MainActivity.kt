@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            else -> Log.d("part1Service", "None of the above is received.")
+            else -> Log.d("part1Service", "$responseValue is received.")
         }
 
     }
