@@ -63,3 +63,13 @@ object IsServiceOn {
         return false
     }
 }
+
+object StringFetch{
+    var tagName : String= "part1Service"
+    var serviceRunMessage : String= "Service is already running."
+    var palindromeMessage : String= "is a palindrome"
+    var notPalindromeMessage : String= "is not a palindrome"
+    var evenMessage : String= "is an Even number"
+    var oddMessage : String= "is an Odd number"
+    var logMessageForWhen : String= "Received response: "
+}

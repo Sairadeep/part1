@@ -23,67 +23,64 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
         setContentView(view)
         val intent = Intent(this@MainActivity, Part1Service::class.java)
-        isServiceRunning = IsServiceOn.isServiceRunning(this@MainActivity,intent::class.java)
-        if(!isServiceRunning) startService(intent) else Log.d("part1Service","Service is already running.")
+        isServiceRunning = IsServiceOn.isServiceRunning(this@MainActivity, intent::class.java)
+        if (!isServiceRunning) startService(intent) else Log.d(
+            StringFetch.tagName,
+            StringFetch.serviceRunMessage
+        )
+
         mainBinding.palindromeButton.setOnClickListener {
-            Utils.setName(mainBinding.palindromeText.text.toString())
-            Log.d("part1Service", "Setting Name: ${Utils.getName()}")
-            if (mainBinding.palindromeText.text.toString().equals(Utils.getName(), true)) {
-                Log.d("part1Service", mainBinding.palindromeText.text.toString())
-                Log.d("part1Service", Utils.getName())
-                handler.postDelayed(
-                    {
-                        val responseValue = ResponseBackCheck.getResponseValue()
-                        Log.d(
-                            "part1Service",
-                            "Response from part2 in communication from part3: $responseValue"
-                        )
-                        responseToDisplay(responseValue)
-                    }, 2000
-                )
-            }
+            onCheckPalindromeButtonSelected()
         }
         mainBinding.checkNumber.setOnClickListener {
-            val num: String = mainBinding.evenNumField.text.toString()
-            CheckEvenOdd.setNumber(num.toInt())
-            Log.d("part1Service", "NUM ${CheckEvenOdd.getNumber()}")
-            handler.postDelayed(
-                {
-                    val responseValueEO = EvenOddResponse.getResponseValueEO()
-                    Log.d(
-                        "part1Service",
-                        "Response from part2 in communication from part4: $responseValueEO"
-                    )
-                    responseToDisplay(responseValueEO)
-                }, 2000
-            )
+            onEOCheckSelected()
         }
         mainBinding.mainLayout.setOnClickListener {
             hideKeyboard(it)
         }
     }
 
+    private fun onEOCheckSelected() {
+        val num: String = mainBinding.evenNumField.text.toString()
+        CheckEvenOdd.setNumber(num.toInt())
+        handler.postDelayed({
+                val responseValueEO = EvenOddResponse.getResponseValueEO()
+                responseToDisplay(responseValueEO)
+            }, 2000
+        )
+    }
+
+    private fun onCheckPalindromeButtonSelected() {
+        Utils.setName(mainBinding.palindromeText.text.toString())
+        if (mainBinding.palindromeText.text.toString().equals(Utils.getName(), true)) {
+            handler.postDelayed({
+                val responseValue = ResponseBackCheck.getResponseValue()
+                responseToDisplay(responseValue)
+            }, 2000)
+        }
+    }
+
     private fun responseToDisplay(responseValue: Int) {
         when (responseValue) {
-            0 -> Toast.makeText(this, "${Utils.getName()} is not a palindrome", Toast.LENGTH_LONG)
+            0 -> Toast.makeText(this, "${Utils.getName()} ${StringFetch.notPalindromeMessage}", Toast.LENGTH_LONG)
                 .show()
 
-            1 -> Toast.makeText(this, "${Utils.getName()} is a palindrome", Toast.LENGTH_LONG)
+            1 -> Toast.makeText(this, "${Utils.getName()} ${StringFetch.palindromeMessage}", Toast.LENGTH_LONG)
                 .show()
 
             2 -> Toast.makeText(
                 this@MainActivity,
-                "${CheckEvenOdd.getNumber()} is an Even number",
+                "${CheckEvenOdd.getNumber()} ${StringFetch.evenMessage}",
                 Toast.LENGTH_LONG
             ).show()
 
             3 -> Toast.makeText(
                 this@MainActivity,
-                "${CheckEvenOdd.getNumber()} is an Odd number",
+                "${CheckEvenOdd.getNumber()} ${StringFetch.oddMessage}",
                 Toast.LENGTH_LONG
             ).show()
 
-            else -> Log.d("part1Service", "$responseValue is received.")
+            else -> Log.d(StringFetch.tagName, "${StringFetch.logMessageForWhen} $responseValue")
         }
     }
 

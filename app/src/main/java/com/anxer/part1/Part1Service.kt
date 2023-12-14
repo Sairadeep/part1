@@ -9,11 +9,10 @@ class Part1Service : Service() {
     private var isServiceRunning = false
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("part1Service", "Part1Service started, starting part2 service now")
         val part2ServiceStart = Intent("MyPart2Service")
         part2ServiceStart.setPackage("com.anxer.part2")
         isServiceRunning = IsServiceOn.isServiceRunning(this,part2ServiceStart::class.java)
-        if(!isServiceRunning) startService(part2ServiceStart) else Log.d("part1Service","part2 Service is already running.")
+        if(!isServiceRunning) startService(part2ServiceStart) else Log.d(StringFetch.tagName,StringFetch.serviceRunMessage)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -23,18 +22,14 @@ class Part1Service : Service() {
 
     private var binder = object : IOneAidlInterface.Stub() {
         override fun sendName(): String {
-            Log.d("part1Service", "getName(): ${Utils.getName()}")
             return Utils.getName()
         }
 
         override fun checkBack(response: Int) {
-            Log.d("part1Service", "checkBack response: $response")
             ResponseBackCheck.setResponse(response)
-            Log.d("part1Serviced", "${ResponseBackCheck.getResponseValue()}")
         }
 
         override fun sendNumber(): Int {
-            Log.d("part1Service","Sent ${CheckEvenOdd.getNumber()}")
             return CheckEvenOdd.getNumber()
         }
 
