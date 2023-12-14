@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">part1</string>
+    <string name="button_palindrome">Check Palindrome</string>
+    <string name="button_eo">Check Even</string>
+    <string name="palindrome_hint">Enter text for the palindrome</string>
+    <string name="evenodd_hint">Enter a number</string>
 </resources>
